@@ -22,6 +22,7 @@ import { QTCircle, QTDebugRender, QTPoint, QTRect, QuadTree } from '../systems/Q
 import { StarPointsMng } from '../mng/StarPointsMng';
 import { FAR_STAR_COLORS, RACES, STAR_COLOR_2 } from '../data/DB';
 import { LogMng } from '../utils/LogMng';
+import { ScreenTest } from './ScreenTest';
 
 type GalaxyParams = {
     starsCount: number;
@@ -182,6 +183,8 @@ export class Galaxy {
     private quadTree: QuadTree;
     private qtDebugRender: QTDebugRender;
 
+    private screenTest: ScreenTest;
+
 
     constructor(aParams: any) {
         this.render = aParams.render;
@@ -322,6 +325,10 @@ export class Galaxy {
         this.fsm.addState(States.star, this, this.onStateStarEnter, this.onStateStarUpdate);
         this.fsm.addState(States.fromStar, this, this.onStateFromStarEnter, this.onStateFromStarUpdate);
         this.fsm.startState(States.init);
+
+        // TEST video
+        this.screenTest = new ScreenTest(this.camera, this.scene, this.orbitControl);
+        this.scene.add(this.screenTest);
 
         // front events
 
@@ -2008,6 +2015,8 @@ export class Galaxy {
     update(dt: number) {
 
         this.fsm.update(dt);
+
+        this.screenTest.render();
 
 
     }

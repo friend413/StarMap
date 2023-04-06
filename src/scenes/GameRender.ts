@@ -6,6 +6,7 @@ import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
 import { FXAAShader } from "three/examples/jsm/shaders/FXAAShader";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
 import { SMAAPass } from "three/examples/jsm/postprocessing/SMAAPass";
+import { CSS3DRenderer, CSS3DObject } from 'three/examples/jsm/renderers/CSS3DRenderer';
 
 import * as datGui from "dat.gui";
 import { InputMng } from "../inputs/InputMng";
@@ -16,11 +17,13 @@ import { Galaxy } from "./Galaxy";
 import { FrontEvents } from "../events/FrontEvents";
 import { GameEvents } from "../events/GameEvents";
 import { GameUtils } from "../math/GameUtils";
+import { ScreenTest } from "./ScreenTest";
 
 
 export class GameRender {
     
     private renderer: THREE.WebGLRenderer;
+    // private renderer: CSS3DRenderer;
     private fxaaPass: ShaderPass;
     private smaaPass: SMAAPass;
     private composer: EffectComposer;
@@ -57,6 +60,7 @@ export class GameRender {
         LogMng.debug(`Renderer PixelRatio: ${this.renderPixelRatio}`);
         Settings.domCanvasParent.appendChild(this.renderer.domElement);
         Settings.domRenderer = this.renderer.domElement;
+        // Settings.domBlocker = document.getElementById('blocker');
 
         // SCENES
 

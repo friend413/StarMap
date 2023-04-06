@@ -10,6 +10,8 @@ export class Settings {
     static domTouchParent: HTMLElement = null;
     static domGuiParent: HTMLElement = null;
     static domRenderer: HTMLElement = null;
+    // static domBlocker: HTMLElement = null;
+    
     static assetsPath = './assets/';
 
     // utils
