@@ -7,6 +7,7 @@ export class ScreenTest extends THREE.Group {
     camera;
     cameraCtrl;
     private renderer: CSS3DRenderer;
+    videoTexture: THREE.VideoTexture;
 
     constructor(camera, scene, cameraCtrl) {
         super();
@@ -15,14 +16,18 @@ export class ScreenTest extends THREE.Group {
         this.camera = camera;
         this.cameraCtrl = cameraCtrl;
 
-        // this.init1();
-        this.init2();
+        // this.initYT1();
+        // this.initYT2();
+        // this.initYT3();
+        // this.initYT4();
+
+        this.initTwitch();
 
         // this.add(this.createCSS('ipLtiGPjyyo', 0, 0, 0, 0));
 
     }
 
-    init1() {
+    initYT1() {
 
         const container = document.getElementById('container');
 
@@ -60,7 +65,7 @@ export class ScreenTest extends THREE.Group {
 
     }
 
-    init2() {
+    initYT2() {
 
         // Load the YouTube API client library
         gapi.load('client', () => {
@@ -123,6 +128,76 @@ export class ScreenTest extends THREE.Group {
         });
 
 
+
+    }
+
+    initYT3() {
+        const player = new YT.Player('video-player', {
+            videoId: 'P1aSX58RyhU',
+            playerVars: {
+                controls: 0,
+                disablekb: 1,
+                enablejsapi: 1,
+                iv_load_policy: 3,
+                modestbranding: 1,
+                rel: 0,
+                showinfo: 0
+            },
+            events: {
+                onReady: (event: YT.PlayerEvent) => {
+                    event.target.playVideo();
+                },
+                onStateChange: (event: YT.OnStateChangeEvent) => {
+                    if (event.data === YT.PlayerState.PLAYING) {
+                        // Видео воспроизводится, можно использовать его текстуру
+                        this.initYT3Texture();
+                    }
+                }
+            }
+        });
+    }
+
+    initYT3Texture() {
+
+        const videoPlayer = document.getElementById('video-player') as HTMLVideoElement;
+        this.videoTexture = new THREE.VideoTexture(videoPlayer);
+        // videoTexture.minFilter = THREE.LinearFilter;
+        // videoTexture.magFilter = THREE.LinearFilter;
+        // videoTexture.format = THREE.RGBFormat;
+
+        const material = new THREE.MeshBasicMaterial({ map: this.videoTexture });
+
+        const geometry = new THREE.PlaneGeometry(16 * 2, 9 * 2);
+        const mesh = new THREE.Mesh(geometry, material);
+        mesh.position.y = 20;
+
+        this.scene.add(mesh);
+
+        // videoPlayer.play();
+
+    }
+
+    initYT4() {
+        // Загружаем API клиента для YouTube Live
+        gapi.client.load('youtube', 'v3', () => {
+            // Запрашиваем список трансляций
+            var request = (gapi.client as any).youtube.liveBroadcasts.list({
+                part: 'snippet',
+                broadcastStatus: 'active',
+                eventType: 'live'
+            });
+            request.execute((response) => {
+                // Если есть активные трансляции, выводим первую из них в элемент <video>
+                if (response.items.length > 0) {
+                    var videoUrl = 'https://www.youtube.com/watch?v=' + response.items[0].id;
+                    const videoElement = document.getElementById('video-player') as HTMLVideoElement;
+                    videoElement.src = videoUrl;
+                }
+            });
+        });
+    }
+
+    initTwitch() {
 
     }
 
@@ -226,6 +301,10 @@ export class ScreenTest extends THREE.Group {
 
     render() {
         // this.renderer.render(this.scene, this.camera);
+
+        // yt 3
+        // if (this.videoTexture) this.videoTexture.needsUpdate = true;
+
     }
 
 
