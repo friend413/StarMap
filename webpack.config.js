@@ -94,7 +94,7 @@ module.exports = {
   },
 
   devServer: {
-    port: 9184,
+    port: 9185,
     static: {
       directory: path.join(__dirname, 'build')
     },

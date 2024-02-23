@@ -345,4 +345,27 @@ export class StarGenerator implements ILogger {
         aData.starInfo.bigStar.color = clrBigStar;
     }
 
+    generateServerStarParams(): ServerStarData {
+        return {
+            id: MyMath.randomIntInRange(0, Number.MAX_SAFE_INTEGER),
+            owner: '0x0',
+            params: {
+                coords: null,
+                creation: 0,
+                fuel: 100,
+                fuelSpendings: 1,
+                habitableZoneMin: 1,
+                habitableZoneMax: 10,
+                isLive: true,
+                level: MyMath.randomIntInRange(1, 5),
+                levelUpFuel: 1000,
+                mass: MyMath.randomIntInRange(10, 10000),
+                name: `Star ${MyMath.randomIntInRange(0, 10000)}`,
+                planetSlots: 5,
+                race: "Humans",
+                updated: 0
+            }
+        }
+    }
+
 }

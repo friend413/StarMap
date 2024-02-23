@@ -53,12 +53,6 @@ export class GamePreloader {
 
         let assetsPath = Settings.assetsPath;
 
-        // star point sprite
-        // this._loader.texture('starPoint', `./assets/starPoint.svg`);
-        // this._loader.texture('starPoint', `./assets/starPoint_512.png`);
-        // this._loader.addFileToSet(aSetId, 'starPoint', `./assets/starPoint_128.png`);
-        // this._loader.texture('starPoint', `./assets/starPoint2.svg`);
-
         // skybox
         let path = assetsPath + 'skybox/skybox5/';
         let sbNames = ['right', 'left', 'top', 'bottom', 'front', 'back'];
@@ -91,8 +85,6 @@ export class GamePreloader {
         }
 
         path = assetsPath + 'particles/';
-        // loader.texture('circle_01', `${path}circle_01.png`);  
-        // this.loader.texture('star3', `${path}Star_3_256.png`);
         this._loader.addFileToSet(aSetId, {
             alias: 'star4',
             file: `${path}Star_4_256.png`

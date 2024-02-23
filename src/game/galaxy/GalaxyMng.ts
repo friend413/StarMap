@@ -53,9 +53,9 @@ export class GalaxyMng implements ILogger {
     private _gridPlane: THREE.GridHelper;
 
     private _starIdCounter = 0;
-    private _phantomStarsData: GalaxyStarParams[];
-    private _phantomStarsParticles: GalaxyStars;
-    private _phantomStarPicked: GalaxyStarParams;
+    // private _phantomStarsData: GalaxyStarParams[];
+    // private _phantomStarsParticles: GalaxyStars;
+    // private _phantomStarPicked: GalaxyStarParams;
 
     private _realStarsData: GalaxyStarParams[];
     private _realStarsParticles: GalaxyStars;
@@ -99,7 +99,7 @@ export class GalaxyMng implements ILogger {
     private _prevCamPolarAngle = 0;
 
     private _quadTreeReal: QuadTree;
-    private _quadTreePhantom: QuadTree;
+    // private _quadTreePhantom: QuadTree;
     private _qtDebugRender: QTDebugRender;
 
     private _info: { cameraDistance: number, cameraDistanceStr: string, camDistGui?: datGui.GUIController } = {
@@ -220,10 +220,10 @@ export class GalaxyMng implements ILogger {
 
         // fly system
         let starsPos: THREE.Vector3[] = [];
-        for (let i = 0; i < DB.realStars.length; i += 2) {
-            let pos = DB.realStars[i].params.coords;
-            if (pos.X && pos.Y && pos.Z) {
-                starsPos.push(new THREE.Vector3(pos.X, pos.Y, pos.Z));
+        for (let i = 0; i < this._realStarsData.length; i += 2) {
+            let pos = this._realStarsData[i].pos;
+            if (pos.x && pos.y && pos.z) {
+                starsPos.push(new THREE.Vector3(pos.x, pos.y, pos.z));
             }
         }
         this.smallFlySystem = new SmallFlySystem(this._dummyGalaxy, starsPos);
@@ -386,7 +386,7 @@ export class GalaxyMng implements ILogger {
                 this.createSmallGalaxies();
             },
             'saveGalaxy': () => {
-                FileMng.saveGalaxy(Settings.galaxyData, this._phantomStarsData, this._blinkStarsData, this._farGalaxiesData);
+                FileMng.saveGalaxy(Settings.galaxyData, this._realStarsData, this._blinkStarsData, this._farGalaxiesData);
             },
             'flyFromStar': () => {
                 if (this._fsm.getCurrentState().name == GalaxyStates.star) {
@@ -607,52 +607,52 @@ export class GalaxyMng implements ILogger {
 
         // real star particles
 
-        if (DB.realStars[0]?.id == 0) {
-            DB.realStars.splice(0, 1);
-        }
-        else {
-            for (let i = DB.realStars.length - 1; i >= 0; i--) {
-                const element = DB.realStars[i];
-                if (element.id == 0) DB.realStars.splice(i, 1);
-            }
-        }
+        // if (DB.realStars[0]?.id == 0) {
+        //     DB.realStars.splice(0, 1);
+        // }
+        // else {
+        //     for (let i = DB.realStars.length - 1; i >= 0; i--) {
+        //         const element = DB.realStars[i];
+        //         if (element.id == 0) DB.realStars.splice(i, 1);
+        //     }
+        // }
 
         // get real stars data
-        this._realStarsData = StarGenerator.getInstance().getRealStarDataByServer({
-            alphaMin: Settings.galaxyData.alphaMin,
-            alphaMax: Settings.galaxyData.alphaMax,
-            scaleMin: Settings.galaxyData.scaleMin,
-            scaleMax: Settings.galaxyData.scaleMax
-        }, DB.realStars);
+        // this._realStarsData = StarGenerator.getInstance().getRealStarDataByServer({
+        //     alphaMin: Settings.galaxyData.alphaMin,
+        //     alphaMax: Settings.galaxyData.alphaMax,
+        //     scaleMin: Settings.galaxyData.scaleMin,
+        //     scaleMax: Settings.galaxyData.scaleMax
+        // }, DB.realStars);
 
-        // real stars particles
-        this._realStarsParticles = new GalaxyStars({
-            camera: this._camera,
-            starsData: this._realStarsData,
-            camDistLogic: true,
-            onWindowResizeSignal: FrontEvents.onWindowResizeSignal,
-            alpha: {
-                camDist: {
-                    min: 50,
-                    max: 400
-                },
-                value: {
-                    min: .2,
-                    max: 1
-                }
-            }
-        });
+        // // real stars particles
+        // this._realStarsParticles = new GalaxyStars({
+        //     camera: this._camera,
+        //     starsData: this._realStarsData,
+        //     camDistLogic: true,
+        //     onWindowResizeSignal: FrontEvents.onWindowResizeSignal,
+        //     alpha: {
+        //         camDist: {
+        //             min: 50,
+        //             max: 400
+        //         },
+        //         value: {
+        //             min: .2,
+        //             max: 1
+        //         }
+        //     }
+        // });
 
-        this._dummyGalaxy.add(this._realStarsParticles);
+        // this._dummyGalaxy.add(this._realStarsParticles);
 
         
         // phantom stars data
 
         if (loadedStarsData) {
-            this._phantomStarsData = loadedStarsData;
+            this._realStarsData = loadedStarsData;
         }
         else {
-            this._phantomStarsData = StarGenerator.getInstance().generateGalaxyStarsData({
+            this._realStarsData = StarGenerator.getInstance().generateGalaxyStarsData({
                 starsCount: Settings.galaxyData.starsCount,
                 startAngle: Settings.galaxyData.startAngle,
                 endAngle: Settings.galaxyData.endAngle,
@@ -668,32 +668,11 @@ export class GalaxyMng implements ILogger {
             }, 145, 145, true);
         }
 
-        // make it phantom and remove real stars
-        for (let i = this._phantomStarsData.length - 1; i >= 0; i--) {
-            const sd = this._phantomStarsData[i];
-
-            let isDeleted = false;
-            for (let j = 0; j < this._realStarsData.length; j++) {
-                const rsd = this._realStarsData[j];
-                let dist = MyMath.getVec3Length(rsd.pos.x, rsd.pos.y, rsd.pos.z, sd.pos.x, sd.pos.y, sd.pos.z);
-                if (dist <= 0.01) {
-                    // remove
-                    this.logDebug(`remove star for dist: ${dist}`);
-                    this._phantomStarsData.splice(i, 1);
-                    isDeleted = true;
-                    break;
-                }
-            }
-            if (isDeleted) continue;
-
-            StarGenerator.getInstance().starToPhantom(sd);
-        }
-
         // particle stars particles
 
-        this._phantomStarsParticles = new GalaxyStars({
+        this._realStarsParticles = new GalaxyStars({
             camera: this._camera,
-            starsData: this._phantomStarsData,
+            starsData: this._realStarsData,
             // texture: t,
             camDistLogic: true,
             onWindowResizeSignal: FrontEvents.onWindowResizeSignal,
@@ -709,10 +688,10 @@ export class GalaxyMng implements ILogger {
             }
         });
         // this.starsParticles.alphaFactor = 0.5;
-        this._phantomStarsParticles.visible = false;
-        this._dummyGalaxy.add(this._phantomStarsParticles);
+        // this._phantomStarsParticles.visible = false;
+        this._dummyGalaxy.add(this._realStarsParticles);
 
-        Settings.galaxyData.starsCount = this._phantomStarsData.length;
+        Settings.galaxyData.starsCount = this._realStarsData.length;
         
         // blink stars data generate
         if (loadedBlinkStarsData) {
@@ -819,27 +798,27 @@ export class GalaxyMng implements ILogger {
         this.recreateRealStars();
         this.destroyPhantomStarParticles();
 
-        Settings.galaxyData.starsCount = this._phantomStarsData.length;
+        // Settings.galaxyData.starsCount = this._phantomStarsData.length;
 
         // phantom particle stars
-        this._phantomStarsParticles = new GalaxyStars({
-            camera: this._camera,
-            starsData: this._phantomStarsData,
-            camDistLogic: true,
-            onWindowResizeSignal: FrontEvents.onWindowResizeSignal,
-            alpha: {
-                camDist: {
-                    min: 50,
-                    max: 400
-                },
-                value: {
-                    min: .2,
-                    max: 1
-                }
-            }
-        });
-        this._phantomStarsParticles.visible = false;
-        this._dummyGalaxy.add(this._phantomStarsParticles);
+        // this._phantomStarsParticles = new GalaxyStars({
+        //     camera: this._camera,
+        //     starsData: this._phantomStarsData,
+        //     camDistLogic: true,
+        //     onWindowResizeSignal: FrontEvents.onWindowResizeSignal,
+        //     alpha: {
+        //         camDist: {
+        //             min: 50,
+        //             max: 400
+        //         },
+        //         value: {
+        //             min: .2,
+        //             max: 1
+        //         }
+        //     }
+        // });
+        // this._phantomStarsParticles.visible = false;
+        // this._dummyGalaxy.add(this._phantomStarsParticles);
         
     }
 
@@ -861,19 +840,19 @@ export class GalaxyMng implements ILogger {
         }
 
         // PHANTOM STARS
-        if (this._quadTreePhantom) {
-            this._quadTreePhantom.destroy();
-            this._quadTreePhantom = null;
-        }
+        // if (this._quadTreePhantom) {
+        //     this._quadTreePhantom.destroy();
+        //     this._quadTreePhantom = null;
+        // }
 
-        this._quadTreePhantom = new QuadTree(new QTRect(0, 0, 400, 400), 30);
+        // this._quadTreePhantom = new QuadTree(new QTRect(0, 0, 400, 400), 30);
 
         // add stars to quadtree
-        for (let i = 0; i < this._phantomStarsData.length; i++) {
-            const sd = this._phantomStarsData[i];
-            if (sd.id == null) sd.id = StarGenerator.getInstance().getStarId();
-            this._quadTreePhantom.addPoint(new QTPoint(sd.pos.x, sd.pos.z, { starData: sd }));
-        }
+        // for (let i = 0; i < this._phantomStarsData.length; i++) {
+        //     const sd = this._phantomStarsData[i];
+        //     if (sd.id == null) sd.id = StarGenerator.getInstance().getStarId();
+        //     this._quadTreePhantom.addPoint(new QTPoint(sd.pos.x, sd.pos.z, { starData: sd }));
+        // }
         // LogMng.debug(`qt:`, this.quadTree);
 
         // if (!this.qtDebugRender) {
@@ -886,15 +865,15 @@ export class GalaxyMng implements ILogger {
     }
 
     private destroyPhantomStarParticles() {
-        if (this._phantomStarsParticles) {
-            try {
-                this._dummyGalaxy.remove(this._phantomStarsParticles);
-            } catch (error) {
-                // TODO
-            }
-            this._phantomStarsParticles.free();
-            this._phantomStarsParticles = null;
-        }
+        // if (this._phantomStarsParticles) {
+        //     try {
+        //         this._dummyGalaxy.remove(this._phantomStarsParticles);
+        //     } catch (error) {
+        //         // TODO
+        //     }
+        //     this._phantomStarsParticles.free();
+        //     this._phantomStarsParticles = null;
+        // }
     }
 
     private destroyRealStarParticles() {
@@ -1214,9 +1193,7 @@ export class GalaxyMng implements ILogger {
     private getNearestStarPosition(aPoint: THREE.Vector3): THREE.Vector3 {
         let res: THREE.Vector3;
         let minDist = Number.MAX_SAFE_INTEGER;
-        let quadTree = this._fsm.getCurrentState().name == GalaxyStates.realStars
-            ? this._quadTreeReal
-            : this._quadTreePhantom;
+        let quadTree = this._quadTreeReal;
         let stars = quadTree.getPointsInCircle(new QTCircle(aPoint.x, aPoint.z, 200));
         for (let i = 0; i < stars.length; i++) {
             const star = stars[i];
@@ -1281,9 +1258,13 @@ export class GalaxyMng implements ILogger {
 
                         this.starPointParamsHovered = this.starPointHovered.params;
                         let starParams = this.starPointHovered.params.starParams;
-                        if (!starParams.starInfo?.serverData) {
-                            this.logWarn(`onClick: UNKNOWN starParams.starInfo.serverData!`, starParams);
+                        if (!starParams.starInfo) {
                             return;
+                        }
+                        if (!starParams.starInfo.serverData) {
+                            // this.logWarn(`onClick: UNKNOWN starParams.starInfo.serverData!`, starParams);
+                            // generate server data
+                            starParams.starInfo.serverData = StarGenerator.getInstance().generateServerStarParams();
                         }
 
                         LogMng.debug('onClick(): realStars: starParams:', starParams);
@@ -1324,17 +1305,6 @@ export class GalaxyMng implements ILogger {
                         if (this._orbitControl.enabled) this._orbitControl.enabled = false;
 
                         this.starPointParamsHovered = this.starPointHovered.params;
-                        this._phantomStarPicked = this.starPointHovered.params.starParams;
-
-                        LogMng.debug('onClick(): phantomStar params:', this._phantomStarPicked);
-
-                        GameEventDispatcher.dispatchEvent(GameEvent.PHANTOM_STAR_PREVIEW, {
-                            pos3d: this._phantomStarPicked.pos,
-                            pos2d: {
-                                x: pos.x,
-                                y: pos.y
-                            }
-                        });
 
                     }
                     else {
@@ -1496,20 +1466,6 @@ export class GalaxyMng implements ILogger {
         this._realStarsParticles.update(dt);
     }
 
-    private updatePhantomStars(dt: number) {
-        const an = this.getAbsPolarAngle();
-        const MIN_ALPHA = 0.5;
-        let starsOpacity = MIN_ALPHA + (1 - (an / (Math.PI / 2))) * (1 - MIN_ALPHA);
-
-        let camDist = this._camera.position.length()
-        this._info.cameraDistance = camDist;
-        this._info.cameraDistanceStr = String(camDist.toFixed(0));
-        this._info.camDistGui?.updateDisplay();
-
-        this._phantomStarsParticles.alphaFactor = starsOpacity * 1.5; // Settings.galaxyData.starAlphaFactor;
-        this._phantomStarsParticles.update(dt);
-    }
-
     private updateBlinkStars(dt: number) {
         this._blinkStarsParticles.update(dt);
     }
@@ -1568,7 +1524,7 @@ export class GalaxyMng implements ILogger {
     private updateStarPoints() {
 
         if (!Settings.STAR_CLICK_POINTS) return;
-        const isPhantomMode = this._fsm.getCurrentState().name == GalaxyStates.phantomStars;
+        const isPhantomMode = false; // this._fsm.getCurrentState().name == GalaxyStates.phantomStars;
 
         // new dynamic points
         const MaxCheckRadius = Settings.POINTS_CAMERA_MAX_DIST;
@@ -1584,9 +1540,6 @@ export class GalaxyMng implements ILogger {
                     levels: this._levelFilter,
                     name: this._nameFilter
                 });
-                break;
-            case GalaxyStates.phantomStars:
-                points = this._quadTreePhantom.getPointsInCircle(new QTCircle(targetPos.x, targetPos.z, checkRadius));
                 break;
         }
 
@@ -1646,7 +1599,6 @@ export class GalaxyMng implements ILogger {
         this._orbitControl.enableZoom = true;
         this._orbitControl.enabled = true;
 
-        this._phantomStarsParticles.visible = false;
         this._realStarsParticles.visible = true;
 
         this.smallFlySystem.activeSpawn = true;
@@ -1689,10 +1641,6 @@ export class GalaxyMng implements ILogger {
         this._orbitControl.autoRotate = true;
         this._orbitControl.enableZoom = true;
         this._orbitControl.enabled = true;
-
-        this._realStarsParticles.visible = false;
-        this._phantomStarsParticles.visible = true;
-
         this.smallFlySystem.activeSpawn = false;
     }
 
@@ -1705,8 +1653,6 @@ export class GalaxyMng implements ILogger {
 
         this.updateGalaxyPlane(dt);
         this.updateGalaxyCenterSprite();
-        // this.updateGalaxyStars(dt);
-        this.updatePhantomStars(dt);
         this.updateBlinkStars(dt);
         this.updateFarStars(dt);
         this.updateSmallGalaxies(dt);
@@ -2296,16 +2242,6 @@ export class GalaxyMng implements ILogger {
     private _novaSprite: THREE.Sprite;
     private onStateCreateStarEnter(aServerStarData: ServerStarData) {
 
-        // find star in phantom mode and remove it
-        for (let i = 0; i < this._phantomStarsData.length; i++) {
-            const psd = this._phantomStarsData[i];
-            if (psd.id == this._phantomStarPicked?.id) {
-                this._phantomStarsData.splice(i, 1);
-                break;
-            }
-        }
-        this.recreateGalaxyStars(false);
-
         // add new star to real mode
         let newRealStars = StarGenerator.getInstance().getRealStarDataByServer({
             alphaMin: Settings.galaxyData.alphaMin,
@@ -2328,7 +2264,6 @@ export class GalaxyMng implements ILogger {
         this.initQuadTree();
 
         // switch to real mode
-        this._phantomStarsParticles.visible = false;
         this._realStarsParticles.visible = true;
         GameEventDispatcher.dispatchEvent(GameEvent.SHOW_REAL_MODE);
 
