@@ -69,6 +69,19 @@
       overflow: hidden !important;
     }
   </style>
+  <style>
+    .fpsInfo {
+      color: #F00;
+      position: fixed;
+      top: 100px;
+      left: 50px;
+      font-size: 18px;
+      font-weight: 700;
+      z-index: 9999;
+      width: 40px;
+      height: 40px;
+    }
+  </style>
 </head>
 
 <body>
@@ -77,6 +90,9 @@
   </div>
   <div id="game"></div>
   <div id="gui"></div>
+  <div class="fpsInfo">
+    FPS: 99
+  </div>
 </body>
 <script
 async
@@ -87,7 +103,33 @@ data-onauth="onTelegramAuth(user)"
 data-request-access="write"
 ></script>
 <script>
+console.log("on load put ________________________________________________:");
+let frameCount = 0;
+let lastUpdateTime =  performance.now();
+let savedFrameCount = 99;
+const ctnr = document.querySelector(".fpsInfo")
+  if (!ctnr) {
+    console.log("Container not found")
+  } else {
+    console.log("Container found")
+  }
+
+  function animate() {
+    requestAnimationFrame(animate);
+    const now = performance.now();
+    const deltaTime = now - lastUpdateTime;
+    frameCount++;
+    if (deltaTime > 1000) { 
+       savedFrameCount = frameCount;
+       frameCount = 0;
+       lastUpdateTime = now;
+       ctnr.innerHTML = `FPS: ${savedFrameCount}`
+    }
+  }
+  animate()
+
 document.addEventListener("load", function() {
+    console.log("on load:")
     let queryString = window.location.href;
     if (queryString.includes("#debug")) {
       let iframes = document.querySelectorAll('iframe[id*="telegram"]');
