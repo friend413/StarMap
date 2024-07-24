@@ -174,7 +174,7 @@ async function GetStarDataFromServer(): Promise<StarList> {
     })
 }
 
-export async function getWeb2StarDataFromServer(): Promise<StarList> {
+/* export async function getWeb2StarDataFromServer(): Promise<StarList> {
     return new Promise(async (reslove, reject) => {
         const url = fastDataServerUrl.concat('api/getstarlist');
         try {
@@ -209,7 +209,7 @@ export async function getWeb2StarDataFromServer(): Promise<StarList> {
             reject(e.message);
         }
     })
-}
+} */
 
 async function RequestToUpdateStars() {
     return new Promise(async (resolve, reject) => {
