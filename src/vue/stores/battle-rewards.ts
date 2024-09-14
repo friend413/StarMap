@@ -8,7 +8,16 @@ import { web2assets } from '~/blockchainTotal/getters/boxesWeb2';
 import { mapAssets } from '@/utils';
 
 export const useBattleRewardsStore = defineStore('battleRewards', () => {
-    const list = ref<BattleReward[]>([])
+    const list = ref<BattleReward[]>([  
+        // { name: `Carbon`, image: '/gui/images/icons/hydrocarbon.png', rare: 'rare', value: 500 },
+        // { name: `Metal`, image: '/gui/images/icons/metal.png', rare: 'rare', value: 500 },
+        // { name: `Spice`, image: '/gui/images/icons/spice.png', rare: 'rare', value: 500 },
+        // { name: `Spores`, image: '/gui/images/icons/spores.png', rare: 'rare', value: 500 },
+        // { name: `Laser`, image: '/gui/images/icons/laser-red.png' , rare: 'rare', value: 500},
+        // { name: `Laser`, image: '/gui/images/icons/laser-white.png' , rare: 'rare', value: 500},
+        // { name: `Laser`, image: '/gui/images/icons/laser-violet.png' , rare: 'rare', value: 500},
+        // { name: `Laser`, image: '/gui/images/icons/laser-violet.png' , rare: 'rare', value: 500},
+    ])
     const boxesIds = ref<number[]>([])
     const waitingBox = ref(false)
     const coins = ref(0)

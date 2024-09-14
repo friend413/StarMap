@@ -3,13 +3,13 @@ import { useClient } from '@/services/client';
 import { useBattleStore, useScenesStore, useStarsStore, useUiStore } from '@/stores';
 import { BattleActionType, ClientEvent, UISceneNames } from '@/types';
 import { wait } from '@/utils';
-import { GameEvent } from '~/game/events/GameEvents';
 import { LogMng } from '~/monax/LogMng';
 import { toast } from 'vue3-toastify';
 import { useWallet } from '@/services/wallet';
 import { BlockchainConnectService } from '~/blockchainTotal';
 import { config } from '@/config';
 import { GlobalParams } from '~/game/data/GlobalParams';
+import { GameEvent } from '~/game/events/Types';
 
 export class ClientEventsService {
   
@@ -23,6 +23,25 @@ export class ClientEventsService {
 
       case GameEvent.MESSAGE:
         toast(clientEvent.msg)
+        break;
+      
+      case GameEvent.STAR_GAME:
+        switch (clientEvent.action) {
+          case 'init':
+            LogMng.debug(`GameEvent.STAR_GAME init:`, clientEvent.initList);
+            uiStore.star.setStarGameInitList(clientEvent.initList);
+            
+            break;
+          case 'update':
+            LogMng.debug(`GameEvent.STAR_GAME update:`, clientEvent.updateData);
+            uiStore.star.updateStarGameList(clientEvent.updateData);
+      
+            break;
+          case 'visible':
+            LogMng.debug(`GameEvent.STAR_GAME visible update:`, clientEvent.visible ? 'true' : 'false');
+            uiStore.star.visibleStarGame(clientEvent.visible ? true : false);
+            break;
+        }
         break;
       
       case GameEvent.GAME_LOADING:
@@ -99,13 +118,14 @@ export class ClientEventsService {
           case 'start':
             // playersConnectMock();
             // seconds
-            const ACCEPT_TIME = clientEvent.time?.acceptTimeSec || 15
+            const ACCEPT_TIME = clientEvent.time?.acceptTimeSec || 50
             // const LOADING_TIME = 4
             
             scenesStore.setScene(UISceneNames.Battle)
 
             // Accept
             scenesStore.setSceneMode('accept');
+            uiStore.stardefender.setStarDefenderMenu('MAIN MENU')
             battleStore.connecting.setAcceptTime(ACCEPT_TIME);
 
             // await wait(toMilliseconds({
@@ -126,6 +146,12 @@ export class ClientEventsService {
           case 'cancel':
             scenesStore.setScene(UISceneNames.Galaxy);
             break;
+          
+          case 'playerPick': 
+             await wait(4000);
+
+             scenesStore.setSceneMode('process');
+
           
           default:
             LogMng.warn(`vue(ClientEventsService): BATTLE_ACCEPT_SCREEN: unknown clientEvent.action=${clientEvent.action}`);
@@ -150,9 +176,8 @@ export class ClientEventsService {
       case GameEvent.BATTLE_PREROLL_SHOW:
         battleStore.connecting.setPlayerSearchingState(false);
         scenesStore.setScene(UISceneNames.Battle);
-
-        // TODO: apply shop init data from clientEvent.shopInitData
-
+        battleStore.shop.setItems(clientEvent.shopInitData.items);
+        console.log('shopInitItem', clientEvent.shopInitData.items)
         battleStore.process.setState({
           players: {
             connected: {
@@ -207,17 +232,15 @@ export class ClientEventsService {
           }
         });
 
-        await wait(3000);
+        // await wait(3000);
 
-        scenesStore.setSceneMode('process');
+        // scenesStore.setSceneMode('process');
 
         break;
+      
+      // case GameEvent.BATTLE_PLAYER_PICK: 
+      //   await wait(3000);
 
-      // case GameEvent.BATTLE_SHOW_START:
-      //   scenesStore.setSceneMode('process');
-      //   break;
-
-      // case 'GAME_BATTLE_ACTION_COOLDOWN':
       //   scenesStore.setSceneMode('process');
       //   break;
 
@@ -232,7 +255,7 @@ export class ClientEventsService {
           type: typeByStatus[clientEvent.status],
           player: clientEvent.ownerName,
           owner: clientEvent.ownerName,
-          demage: clientEvent.params.damageDone,
+          damage: clientEvent.params.damageDone,
           gold: clientEvent.params.goldEarned,
           exp: clientEvent.params.expReceived,
           rating: {
@@ -327,19 +350,40 @@ export class ClientEventsService {
         break;
       
       case GameEvent.BATTLE_SHOP:
-
         switch (clientEvent.data.action) {
           case 'purchase':
             LogMng.debug(`BATTLE_SHOP purchase:`, clientEvent.data);
+            battleStore.shop.removeFromPendingList(clientEvent.data.itemId);
+            battleStore.shop.addToPurchasedList(clientEvent.data.itemId);
+            toast(clientEvent.data.msg, {
+              type: 'success',
+              autoClose: 2000
+            });
             break;
           case 'sale':
             LogMng.debug(`BATTLE_SHOP sale:`, clientEvent.data);
+            battleStore.shop.removeFromPendingList(clientEvent.data.itemId);
+            battleStore.shop.removeFromPurchasedList(clientEvent.data.itemId);
+            toast(clientEvent.data.msg, {
+              type: 'success',
+              autoClose: 2000
+            });
             break;
           case 'purchaseError':
             LogMng.error(`BATTLE_SHOP purchaseError:`, clientEvent.data);
+            battleStore.shop.removeFromPendingList(0);
+            toast(clientEvent.data.msg, {
+              type: 'error',
+              autoClose: 2000
+            });
             break;
           case 'saleError':
             LogMng.error(`BATTLE_SHOP saleError:`, clientEvent.data);
+            battleStore.shop.removeFromPendingList(clientEvent.data.itemId);
+            toast(clientEvent.data.msg, {
+              type: 'error',
+              autoClose: 2000
+            });
             break;
           default:
             LogMng.error(`Unknown BATTLE_SHOP action:`, clientEvent);

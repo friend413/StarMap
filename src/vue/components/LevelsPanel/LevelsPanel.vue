@@ -42,3 +42,4 @@ export default {
 </script>
 
 <style scoped src="./LevelsPanel.css"></style>
+

@@ -9,7 +9,7 @@ import { ThreeLoader } from '../utils/threejs/ThreeLoader';
 import { SimpleRenderer } from '../core/renderers/SimpleRenderer';
 import { BattleConnection, ConnectionEvent } from '../battle/BattleConnection';
 import { DuelInfo, PackTitle, StartGameData } from '../battle/Types';
-import { GameEvent, GameEventDispatcher } from '../events/GameEvents';
+import { GameEventDispatcher } from '../events/GameEvents';
 import { DebugGui } from '../debug/DebugGui';
 import { useWallet } from '@/services';
 import { AudioMng } from '../audio/AudioMng';
@@ -18,6 +18,7 @@ import { BattleAcceptScreenMng, BattleAcceptScreenMngEvent } from '../controller
 import { MyUtils } from '../utils/MyUtils';
 import { BlockchainConnectService } from '~/blockchainTotal';
 import sizeof from 'object-sizeof';
+import { GameEvent } from '../events/Types';
 
 export class GalaxyScene extends BasicScene {
     private _galaxy: GalaxyMng;
@@ -94,6 +95,7 @@ export class GalaxyScene extends BasicScene {
         FrontEvents.onBattleSearch.add(this.onFrontStartBattleSearch, this);
         FrontEvents.onBattleSearchBot.add(this.onFrontStartBattleBotSearch, this);
         FrontEvents.onBattleStopSearch.add(this.onFrontStopBattleSearch, this);
+        FrontEvents.onPlayerPickClick.add(this.onFrontPlayerPickClick, this);
         // battle server events
         let bc = BattleConnection.getInstance();
         bc.on(PackTitle.gameSearching, this.onGameSearchPack, this);
@@ -186,6 +188,15 @@ export class GalaxyScene extends BasicScene {
         this._isBattleSearching = true;
     }
 
+     private onFrontPlayerPickClick() {
+         setTimeout(() => {
+             // this._battleScene.show();
+             this.startScene(SceneNames.BattleScene);
+            }, 3000);
+         GameEventDispatcher.playerPickScreenClose();
+               
+     }
+
     // private onFrontChallengeClick() {
     //     let con = BattleConnection.getInstance();
     //     if (!con.connected) {
@@ -239,11 +250,11 @@ export class GalaxyScene extends BasicScene {
 
                 GameEventDispatcher.battlePrerollShow(aData);
 
-                setTimeout(() => {
+                // setTimeout(() => {
                     //this._battleScene.show();
-                    this.startScene(SceneNames.BattleScene);
-                }, 1000);
-                break;
+                //     this.startScene(SceneNames.BattleScene);
+                // }, 1000);
+                // break;
             default:
                 this.logDebug(`onBattleStartPackage(): unknown cmd:`, aData);
                 break;
@@ -326,6 +337,7 @@ export class GalaxyScene extends BasicScene {
     private initGalaxy() {
 
         this._galaxy = new GalaxyMng({
+            renderer: this._render.renderer,
             parent: this._scene,
             camera: this._camera as THREE.PerspectiveCamera
         });

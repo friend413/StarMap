@@ -1,36 +1,11 @@
-﻿
-export type GalaxyData = {
-    starsCount: number;
-    blinkStarsCount: number;
-    blinkDurMin: number;
-    blinkDurMax: number;
-    startAngle: number;
-    endAngle: number;
-    startOffsetXY: number;
-    endOffsetXY: number;
-    startOffsetH: number;
-    endOffsetH: number;
-    k: number;
-    alphaMin: number;
-    alphaMax: number;
-    scaleMin: number;
-    scaleMax: number;
-    starAlphaFactor: number;
-    cameraDistAlpha: {
-        min: number;
-        max: number;
-        factor: number;
-    },
-    camDistMin: number;
-    camDistMax: number;
-}
+﻿import { GalaxyData } from "./Types";
 
 /**
  * Global parameters
  */
 export class GlobalParams {
 
-    static galaxyVersion = 'v0.3.510';
+    static galaxyVersion = 'v0.3.514';
     static starDefenderVersion = 'v0.2.0';
     static isDebugMode = false; // TODO: move to env parameters
     static isFPSShow = false; // TODO: move to env parameters

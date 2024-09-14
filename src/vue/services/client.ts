@@ -125,11 +125,16 @@ export class ClientService {
     FrontEvents.onBattleStopSearch.dispatch();
   }
 
+  onPlayerPick() {
+    FrontEvents.onPlayerPickClick.dispatch();
+  }
+
   onBattleAccept() {
     // mock
     // useScenesStore().setScene(UISceneNames.Galaxy);
     FrontEvents.onBattleAcceptClick.dispatch();
   }
+
 
   onBattleConnectExit() {
     // mock
@@ -172,6 +177,7 @@ export class ClientService {
     FrontEvents.onBattleExit.dispatch();
   }
 
+
   onClaim() {
     logger.log('claim');
     LogMng.debug(`vue: claim`);
@@ -199,6 +205,14 @@ export class ClientService {
   onEmotionSelect(aEmotion: Emotion) {
     // LogMng.debug(`emotion select: ${type}`);
     FrontEvents.onBattleEmotion.dispatch(aEmotion);
+  }
+
+  onBuyBattleItemClick(id: Number) {
+    FrontEvents.onBattlePurchaseRequest.dispatch(id);
+  }
+
+  onSellBattleItemClick(id: Number) {
+    FrontEvents.onBattleSellRequest.dispatch(id);
   }
 
   static VuePlugin = {
