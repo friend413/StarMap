@@ -9,12 +9,16 @@
     z-index: 3;
 }
 
+.StarDefenderButton__wrapper {
+    position: absolute;
+    top: -48px;
+    left: -38px;
+    transition: transform 0.3s ease-out;
+    will-change: transform;
+}
 .StarDefenderButton__container {
     position: relative;
     display: flex;
-    justify-content: flex-end;
-    align-items: flex-end;
-    /* transition: all 0.08s linear; */
     z-index: 1;
 }
 
@@ -77,10 +81,23 @@
     .StarDefenderButton {
         transform: scale(0.8);
     }
+
+    .StarDefenderButton__wrapper {
+        top: -38.4px;
+        left: -30.4px;
+        transition: transform 0.3s ease-out;
+        will-change: transform;
+    }
 }
 
 @media (max-height: 667px) and (min-width: 501px) {
     .StarDefenderButton {
         transform: scale(0.7);
+    }
+    .StarDefenderButton__wrapper {
+        top: -33.6px;
+        left: -26.6px;
+        transition: transform 0.3s ease-out;
+        will-change: transform;
     }
 }
