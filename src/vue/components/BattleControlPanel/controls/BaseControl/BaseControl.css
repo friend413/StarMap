@@ -30,6 +30,7 @@
 .BaseControl.cooldown {
   cursor: default;
   pointer-events: none;
+  touch-action: none;
 }
 
 .BaseControl:not(.disabled, .active) svg {

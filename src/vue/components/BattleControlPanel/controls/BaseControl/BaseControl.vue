@@ -208,7 +208,8 @@ export default {
     const content = this.$refs.skillContent as HTMLElement;
     content.style.transform = '';
   },
-  handleDrop(event: DragEvent) {
+  handleDrop() {
+    
 },
   handleTouchStart(event: TouchEvent) {
     if (!this.canLevelUp) return;
@@ -247,7 +248,7 @@ export default {
         touch.clientY >= rect.top &&
         touch.clientY <= rect.bottom
       ) {
-        this.handleDrop(event);
+        this.handleDrop();
       }
     }
   }

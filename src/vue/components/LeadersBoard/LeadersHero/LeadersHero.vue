@@ -4,7 +4,9 @@
             <img :src="crown" alt="">
         </div>
         <div :class="['LeadersHero__avatar', crownTypeClass]">
-            <img :src="getHeroAvatar(activeNavItem)" alt="Avatar Image">
+            <div class="LeadersHero__avatar-img">
+                <img :src="getHeroAvatar(activeNavItem)" alt="Avatar Image">
+            </div>
         </div>
         <div class="LeadersHero__info exo2-font">
             <h3>{{ getHeroName(activeNavItem) }}</h3>
@@ -79,7 +81,7 @@ export default {
         },
         getHeroAvatar(activeNavItem: number) {
             switch (activeNavItem) {
-                case 0: return  '/gui/images/leaders-board/raiting.png';
+                case 0: return  '/gui/images/leaders-board/raiting.svg';
                 case 1: return  this.avatar;
                 default: return  this.avatar;
             }

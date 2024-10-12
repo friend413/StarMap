@@ -31,17 +31,13 @@
     </transition>
 
     <template v-for="starGame in uiStore.star.starGameInitList" :key="starGame.id">
-      <StarDefenderProcess 
-        v-if="stardefender === 'SEARCH GAME' || stardefender === 'PLAY WITH A BOT' || stardefender === 'DUEL'"
-        :selectedMenu="stardefender"
-        :position="starGame.position2d"
-      />   
       <StarDefenderButton
-        v-else-if="uiStore.star.starGameVisible && uiStore.star.starTooltip == null"
+        v-if="uiStore.star.starGameVisible && uiStore.star.starTooltip == null"
         :starId="starGame.id"
         :title="starGame.gameTitle"
         :name="starGame.starName"
         :position="starGame.position2d"
+        :selectedMenu="stardefender"
         @click="showStarDefender"
         @showStarTooltip="showStarTooltip"
       />
@@ -62,7 +58,7 @@
 
 <script lang="ts">
 import { useUiStore } from '@/stores';
-import { StarBoostPanel, StarPanel, StarTooltipV2, StarDefenderButton, StarDefenderProcess } from '@/components';
+import { StarBoostPanel, StarPanel, StarTooltipV2, StarDefenderButton } from '@/components';
 import { mapStores } from 'pinia';
 
 export default {
@@ -72,7 +68,6 @@ export default {
     StarPanel,
     StarTooltipV2,
     StarDefenderButton,
-    StarDefenderProcess
   },
   computed: {
     ...mapStores(useUiStore),

@@ -31,7 +31,7 @@
                     <div class="LeadersBoard__content">
                         <div class="LeadersBoard__info">
                             <div class="LeadersBoard__info-avatar">
-                                <img src="/gui/images/leaders-board/main-avatar.png" alt="">
+                                <img src="/gui/images/leaders-board/main-avatar.svg" alt="">
                                 <div class="LeadersBoard__info-avatar-animation" v-for="(item, index) in 3" :key="index">
                         
                                 </div>    
@@ -108,93 +108,93 @@ export default {
                 duels: 10543,
                 ratings: 'soon',
                 friends: 0,
-                avatar: '/gui/images/leaders-board/main-avatar.png',
+                avatar: '/gui/images/leaders-board/main-avatar.svg',
             }, 
             leaders: [
                 {
                     name: 'ivemaker',
                     uniqueDuels: 7678,
-                    avatar: '/gui/images/leaders-board/avatar-hero1.png',
+                    avatar: '/gui/images/leaders-board/avatar-hero1.svg',
                 },
                 {
                     name: 'ivemaker',
                     uniqueDuels: 9928,
-                    avatar: '/gui/images/leaders-board/avatar-hero2.png',
+                    avatar: '/gui/images/leaders-board/avatar-hero2.svg',
                 },
                 {
                     name: 'ivemaker',
                     uniqueDuels: 8327,
-                    avatar: '/gui/images/leaders-board/avatar-hero3.png',
+                    avatar: '/gui/images/leaders-board/avatar-hero3.svg',
                 },
                 {
                     name: 'ivemaker',
                     uniqueDuels: 7678,
-                    avatar: '/gui/images/leaders-board/avatar-hero1.png',
+                    avatar: '/gui/images/leaders-board/avatar-hero1.svg',
                 },
                 {
                     name: 'ivemaker',
                     uniqueDuels: 9928,
-                    avatar: '/gui/images/leaders-board/avatar-hero2.png',
+                    avatar: '/gui/images/leaders-board/avatar-hero2.svg',
                 },
                 {
                     name: 'ivemaker',
                     uniqueDuels: 8327,
-                    avatar: '/gui/images/leaders-board/avatar-hero3.png',
+                    avatar: '/gui/images/leaders-board/avatar-hero3.svg',
                 },
                 {
                     name: 'ivemaker',
                     uniqueDuels: 7678,
-                    avatar: '/gui/images/leaders-board/avatar-hero1.png',
+                    avatar: '/gui/images/leaders-board/avatar-hero1.svg',
                 },
                 {
                     name: 'ivemaker',
                     uniqueDuels: 9928,
-                    avatar: '/gui/images/leaders-board/avatar-hero2.png',
+                    avatar: '/gui/images/leaders-board/avatar-hero2.svg',
                 },
                 {
                     name: 'ivemaker',
                     uniqueDuels: 8327,
-                    avatar: '/gui/images/leaders-board/avatar-hero3.png',
+                    avatar: '/gui/images/leaders-board/avatar-hero3.svg',
                 },
                 {
                     name: 'ivemaker',
                     uniqueDuels: 7678,
-                    avatar: '/gui/images/leaders-board/avatar-hero1.png',
+                    avatar: '/gui/images/leaders-board/avatar-hero1.svg',
                 },
                 {
                     name: 'ivemaker',
                     uniqueDuels: 9928,
-                    avatar: '/gui/images/leaders-board/avatar-hero2.png',
+                    avatar: '/gui/images/leaders-board/avatar-hero2.svg',
                 },
                 {
                     name: 'ivemaker',
                     uniqueDuels: 8327,
-                    avatar: '/gui/images/leaders-board/avatar-hero3.png',
+                    avatar: '/gui/images/leaders-board/avatar-hero3.svg',
                 },
                 {
                     name: 'ivemaker',
                     uniqueDuels: 9928,
-                    avatar: '/gui/images/leaders-board/avatar-hero2.png',
+                    avatar: '/gui/images/leaders-board/avatar-hero2.svg',
                 },
                 {
                     name: 'ivemaker',
                     uniqueDuels: 8327,
-                    avatar: '/gui/images/leaders-board/avatar-hero3.png',
+                    avatar: '/gui/images/leaders-board/avatar-hero3.svg',
                 },
                 {
                     name: 'ivemaker',
                     uniqueDuels: 9928,
-                    avatar: '/gui/images/leaders-board/avatar-hero2.png',
+                    avatar: '/gui/images/leaders-board/avatar-hero2.svg',
                 },
                 {
                     name: 'ivemaker',
                     uniqueDuels: 8327,
-                    avatar: '/gui/images/leaders-board/avatar-hero3.png',
+                    avatar: '/gui/images/leaders-board/avatar-hero3.svg',
                 },
                 {
                     name: 'ivemaker',
                     uniqueDuels: 8327,
-                    avatar: '/gui/images/leaders-board/avatar-hero3.png',
+                    avatar: '/gui/images/leaders-board/avatar-hero3.svg',
                 }
             ],
             navbarItems: ['RAITING', 'DUELS', 'FRIENDS'],
@@ -232,10 +232,10 @@ export default {
 
         getRankingAvatar(activeNavItem: number) {
             switch (activeNavItem) {
-                case 0: return  '/gui/images/leaders-board/raiting.png';
-                case 1: return  "/gui/images/leaders-board/other-avatar.png";
-                case 2: return  '/gui/images/leaders-board/main-avatar.png';
-                default: return  "/gui/images/leaders-board/other-avatar.png";
+                case 0: return  '/gui/images/leaders-board/raiting.svg';
+                case 1: return  "/gui/images/leaders-board/other-avatar.svg";
+                case 2: return  '/gui/images/leaders-board/main-avatar.svg';
+                default: return  "/gui/images/leaders-board/other-avatar.svg";
             }
         },
 
@@ -267,13 +267,13 @@ export default {
         },
         getCrown(index: number) {
             if (index === 0) {
-                return '/gui/images/leaders-board/silver-crown.png';
+                return '/gui/images/leaders-board/silver-crown.svg';
             }
             if (index === 1) {
-                return '/gui/images/leaders-board/gold-crown.png';
+                return '/gui/images/leaders-board/gold-crown.svg';
             }
             if (index === 2) {
-                return '/gui/images/leaders-board/bronze-crown.png';
+                return '/gui/images/leaders-board/bronze-crown.svg';
             }
             return null;
         },

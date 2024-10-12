@@ -140,6 +140,7 @@
     border-bottom: 2px solid rgba(50, 129, 211, 0.5);
     padding-bottom: 15px;
     width: 100%;
+    padding-left: 10px; 
 }
 
 .LeadersBoard__info-avatar {
@@ -151,7 +152,7 @@
     align-items: center;
     justify-content: center;
     position: relative;
-}
+} 
 
 .LeadersBoard__info-avatar-animation {
     position: absolute;
@@ -224,7 +225,15 @@
 }
 
 .gold {
-    width: 35%;
+    width: 30%;
+}
+
+.silver {
+    width: 24%;
+}
+
+.bronze {
+    width: 24%;
 }
 
 .LeadersBoard__hero {
