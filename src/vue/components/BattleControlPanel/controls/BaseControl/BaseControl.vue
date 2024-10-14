@@ -2,10 +2,10 @@
   <div class="BaseControl__container">
     <button
       class="BaseControl"
-      :class="{ active, disabled, cooldown: hasCooldown, hasContent: Boolean($slots.default),[name]: Boolean(name), canLevelUp: canLevelUp}"
+      :class="{ active, disabled, cooldown: hasCooldown, hasContent: Boolean($slots.default),[name]: Boolean(name), canLevelUp: canLevelUp && !hasCooldown}"
       :disabled="!active || disabled"
       ref="skillContent"
-      :draggable="canLevelUp"
+      :draggable="canLevelUp && !hasCooldown"
       @dragstart="handleDragStart"
       @drag="handleDrag"
       @dragend="handleDragEnd"
@@ -67,14 +67,14 @@
   </button>
     <div
       v-if="canLevelUp"
-      class="BaseSkill__levelUp"
+      class="BaseControl__levelUp"
       ref="levelUp"
       @dragover.prevent
-      @drop="handleDrop"
+      @drop.prevent="handleDrop"
       @touchend="handleTouchEnd"
       >
-      <div class="BaseSkill__levelContainer">
-        <div v-for="(item, index) in 6" :key="index" class="BaseSkill__levelAnimation">
+      <div class="BaseControl__levelContainer">
+        <div v-for="(item, index) in 6" :key="index" class="BaseControl__levelAnimation">
           <img src="/gui/images/pre-game-countdown/emotion-border.svg">
         </div>
       </div>
@@ -87,18 +87,12 @@ import {
   InvisibilityIcon,
   RocketFireIcon,
   SatelliteFireIcon,
-  SlowdownIcon
+  SlowdownIcon,
+  StarIcon,
+  TowerIcon,
+  ShipIcon,
+  LinkorIcon,
 } from './icons';
-import { 
-  ThunderIcon,
-  VelocityVectorIcon,
-  SurgeSpiresIcon,
-  SpiralSentinelIcon,
-  NuclearOrbIcon,
-  MomentumMatrixIcon,
-  QuantumBoosterIcon,
-  AccelerationAmuletIcon,
- } from '@/components/BattleShop/item/icons';
 import { DefineComponent, PropType } from 'vue';
 import { BattleActionType } from '@/types';
 import { MyMath } from '~/monax/MyMath';
@@ -142,7 +136,6 @@ export default {
   },
   computed: {
     hasCooldown() {
-      console.log(this.cooldown, 'cooldown')
       return this.cooldown !== null && this.cooldown !== undefined;
     },
     canDrag() {
@@ -154,15 +147,10 @@ export default {
         satelliteFire: SatelliteFireIcon,
         rocketFire: RocketFireIcon,
         slowdown: SlowdownIcon,
-        thunder: ThunderIcon,
-        velocityVector: VelocityVectorIcon,
-        nuclearOrb: NuclearOrbIcon,
-        spiralSentinel: SpiralSentinelIcon,
-        accelerationAmulet: AccelerationAmuletIcon,
-        surgesSpire: SurgeSpiresIcon,
-        momentumMatrix: MomentumMatrixIcon,
-        quantumBooster: QuantumBoosterIcon,
-        
+        tower: TowerIcon,
+        star: StarIcon,
+        ship: ShipIcon,
+        linkor: LinkorIcon, 
       }
       
       return icons[this.name]
@@ -209,7 +197,7 @@ export default {
     content.style.transform = '';
   },
   handleDrop() {
-    
+    console.log('handleDrop')
 },
   handleTouchStart(event: TouchEvent) {
     if (!this.canLevelUp) return;
