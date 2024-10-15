@@ -26,12 +26,12 @@
                             class="ShopMenu__item-trading"
                         >
                             <div
-                                v-if="!purchasedList.has(index)"
+                                v-if="!isInInventory(selectedItem)"
                                 @click="buy(index)"
                                 :class="['ShopMenu__item-buy orbitron-font --semi-bold', { 'disabled': !canBuy(items[index]) }]"
                             >
                                 BUY
-                              </div>
+                            </div>
 
                             <div
                                 v-else
@@ -123,10 +123,10 @@ export default {
             confirmation: false,
             confirmResolver: null,
             ImagePath: [
-                "/assets/battleIcon/TOWER.svg",
-                "/assets/battleIcon/STAR.svg",
-                "/assets/battleIcon/SHIP_SM.svg",
-                "/assets/battleIcon/SHIP_BIG.svg"
+                "/assets/battleIcon/tower.svg",
+                "/assets/battleIcon/star.svg",
+                "/assets/battleIcon/ship.svg",
+                "/assets/battleIcon/linkor.svg"
             ]
         };
     },
@@ -142,8 +142,8 @@ export default {
         pendingList() {
             return this.battleStore.shop.pendingList
         },
-        purchasedList() {
-            return this.battleStore.shop.purchasedList
+        inventoryList() {
+            return this.battleStore.shop.inventoryList
         },
         ...mapStores(useBattleStore)
     },
@@ -191,13 +191,16 @@ export default {
             this.confirmation = false
             return confirmed
         },
+        isInInventory(index: number) {
+            return this.inventoryList.includes(index)
+        },
 
         handleShopInfoBtn() {
-           if(!this.purchasedList.has(this.selectedItem))  {
-              this.buy(this.selectedItem)
-           }
-           else
-              this.sell(this.selectedItem)
+            if (!this.isInInventory(this.selectedItem)) {
+                this.buy(this.selectedItem)
+            } else {
+                this.sell(this.selectedItem)
+            }
         }
     },
 

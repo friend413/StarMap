@@ -1,8 +1,6 @@
 import { Race } from "../../blockchainTotal/types";
 
-export type BattleActionType = 'satelliteFire' | 'rocketFire' | 'slowdown' | 'invisibility' | 'thunder' | 'velocityVector' | 'surgesSpire' | 'spiralSentinel' | 'nuclearOrb' | 'momentumMatrix' | 'quantumBooster' | 'accelerationAmulet';
-
-export type BattleItemNameType = 'thunder' | 'velocityVector' | 'surgesSpire' | 'spiralSentinel' | 'nuclearOrb' | 'momentumMatrix' | 'quantumBooster' | 'accelerationAmulet'
+export type BattleActionType = 'satelliteFire' | 'rocketFire' | 'slowdown' | 'invisibility' | 'tower' | 'star' | 'ship' | 'linkor';
 
 export type BattleItemStatusType = {
   id: number

@@ -254,13 +254,7 @@ export class ClientEventsService {
           loss: 'defeat',
           draw: 'defeat'
         }
-
-        // TODO: show enemy params and player level
-        // clientEvent.enemyParams.name
-        // clientEvent.enemyParams.level
-        console.log('clientEvent.playerParams', clientEvent.enemyParams)
-        console.log(clientEvent.showBoxClaim, clientEvent.boxLevel, !clientEvent.hideClaimBtn, 'claim')
-
+        battleStore.shop.clearInventoryList()
         battleStore.results.setResults({
           type: typeByStatus[clientEvent.status],
           enemyName: clientEvent.enemyParams.name,
@@ -367,16 +361,14 @@ export class ClientEventsService {
           case 'purchase':
             LogMng.debug(`BATTLE_SHOP purchase:`, clientEvent.data);
             battleStore.shop.removeFromPendingList(clientEvent.data.itemId);
-            battleStore.shop.addToPurchasedList(clientEvent.data.itemId);
             toast(clientEvent.data.msg, {
               type: 'success',
               autoClose: 2000
             });
             break;
           case 'sale':
-            LogMng.debug(`BATTLE_SHOP sale:`, clientEvent.data);
+            LogMng.debug(`BATTLE_SHOP sale:`, clientEvent.data)
             battleStore.shop.removeFromPendingList(clientEvent.data.itemId);
-            battleStore.shop.removeFromPurchasedList(clientEvent.data.itemId);
             toast(clientEvent.data.msg, {
               type: 'success',
               autoClose: 2000
@@ -384,7 +376,7 @@ export class ClientEventsService {
             break;
           case 'purchaseError':
             LogMng.error(`BATTLE_SHOP purchaseError:`, clientEvent.data);
-            battleStore.shop.removeFromPendingList(0);
+            battleStore.shop.removeFromPendingList(clientEvent.data.itemId);
             toast(clientEvent.data.msg, {
               type: 'error',
               autoClose: 2000
@@ -392,7 +384,6 @@ export class ClientEventsService {
             break;
           case 'saleError':
             LogMng.error(`BATTLE_SHOP saleError:`, clientEvent.data);
-            battleStore.shop.removeFromPendingList(clientEvent.data.itemId);
             toast(clientEvent.data.msg, {
               type: 'error',
               autoClose: 2000
@@ -400,6 +391,8 @@ export class ClientEventsService {
             break;
           case 'inventoryUpdate':
             let invItemIds = clientEvent.data.inventory;
+            battleStore.shop.updateInventoryList(invItemIds);
+            console.log('invItemIds', invItemIds)
             // TODO: update inventory in the GUI
 
             break;
