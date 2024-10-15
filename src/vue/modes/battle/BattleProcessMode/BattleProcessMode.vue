@@ -48,12 +48,6 @@
       </div>
     </transition>
 
-    <!-- <transition name="fade">
-      <div v-if="!showBattleControlPanel" class="BattleShop__panel">
-        <BattleShop @scoreClose="setBattleControlPanelShow" />
-      </div>
-    </transition> -->
-
     <transition name="fade">
         <ShopMenu 
           v-if="shopMenuVisible"
@@ -76,7 +70,6 @@
 <script lang="ts">
 import { useBattleStore, useSettingsStore, useUiStore } from '@/stores';
 import { BattleControlPanel, EmotionsSelect, PlayerEmotion, SettingsPopup } from '@/components';
-import BattleShop from '@/components/BattleShop/BattleShop.vue';
 import { getShortAddress } from '@/utils';
 import { mapStores } from 'pinia';
 import { default as vClickOutside } from 'click-outside-vue3';
@@ -89,7 +82,6 @@ export default {
     EmotionsSelect,
     PlayerEmotion,
     SettingsPopup,
-    BattleShop,
     ShopMenu
   },
   directives: {

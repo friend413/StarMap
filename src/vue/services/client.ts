@@ -173,7 +173,7 @@ export class ClientService {
 
   // TODO: call this method from GUI
   onBattleInventoryItemActivate(aItemId: number) {
-    
+    console.log('onBattleInventoryItemActivate', aItemId)
   }
 
   onBattleExit() {

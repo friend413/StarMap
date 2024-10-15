@@ -1,17 +1,41 @@
 <template>
-    <div v-if="purchasedList.length == 2" class="ShopItemControl__row">
-        <BaseControl :name="itemName[purchasedList[0]]" :disabled="true" />
-        <BaseControl :name="itemName[purchasedList[1]]" :disabled="true" />
+    <div v-if="inventoryList.length == 2" class="ShopItemControl__row">
+        <div class="ShopItemControl__item" @click="handleClick(inventoryList[0])">
+            <BaseControl 
+            :name="itemName[inventoryList[0]]" 
+            :disabled="false" 
+            :active="true"
+            />
+        </div>
+        <div class="ShopItemControl__item" @click="handleClick(inventoryList[1])">
+            <BaseControl 
+            :name="itemName[inventoryList[1]]" 
+            :disabled="false" 
+            :active="true"
+            />
+        </div>
     </div>
 
-    <div v-if="purchasedList.length == 1" class="ShopItemControl__row">
-        <BaseControl :name="itemName[purchasedList[0]]" :disabled="true" />
-        <BaseControl :disabled="true" />
+    <div v-if="inventoryList.length == 1" class="ShopItemControl__row">
+        <div class="ShopItemControl__item" @click="handleClick(inventoryList[0])">
+            <BaseControl 
+            :name="itemName[inventoryList[0]]" 
+            :disabled="false"
+            :active="true"
+            />
+        </div>
+        <div class="ShopItemControl__item">
+            <BaseControl :disabled="true" />
+        </div>
     </div>
 
-    <div v-if="purchasedList.length == 0" class="ShopItemControl__row">
-        <BaseControl :disabled="true" />
-        <BaseControl :disabled="true" />
+    <div v-if="inventoryList.length == 0" class="ShopItemControl__row">
+        <div class="ShopItemControl__item">
+            <BaseControl :disabled="true" />
+        </div>
+        <div class="ShopItemControl__item">
+            <BaseControl :disabled="true" />
+        </div>
     </div>
 </template>
 
@@ -27,8 +51,8 @@ export default {
         BaseControl
     },
     computed: {
-        purchasedList() {
-            return this.battleStore.shop.purchasedItemsArray()
+        inventoryList() {
+            return this.battleStore.shop.inventoryList
         },
         ...mapStores(useBattleStore)
     },
@@ -39,9 +63,15 @@ export default {
     },
     data() {
         return {
-            itemName: ['thunder', 'velocityVector','nuclearOrb' , 'spiralSentinel','accelerationAmulet' , 'surgesSpire' , 'momentumMatrix', 'quantumBooster'],
+            itemName: ['tower', 'star', 'ship', 'linkor'],
         }
     },
+    methods: {
+        handleClick(itemId: number) {
+            console.log('handleClick', itemId)
+            this.$client.onBattleInventoryItemActivate(itemId);
+        }
+    }
 }
 </script>
 
@@ -51,6 +81,7 @@ export default {
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
+    pointer-events: all;
     gap: 5px;
 }
 </style>
